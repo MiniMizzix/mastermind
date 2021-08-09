@@ -1,0 +1,108 @@
+.hidden {
+  visibility: hidden;
+  height: 0px;
+  width: 0px;
+}
+
+@keyframes extended {
+  from {width:0px;}
+  to {width: 170px;}
+}
+
+.extenddroplist {
+  animation-name: extended;
+  animation-duration: 0.05s;
+}
+
+
+.notshown {
+  visibility: hidden;
+  display: none;
+}
+
+.choicepegs {
+  border: solid 1pt black;
+  padding: 5px;
+  background-color: antiquewhite;
+  width:fit-content;
+  overflow:hidden;
+  height: 25px
+}
+
+.answerpegs {
+  margin-bottom: 5em;
+}
+
+.inputpegs {
+  margin-bottom: 1em;
+  display: grid;
+  grid-template-columns: repeat(4, 28px) 4em;
+}
+
+.guessbutton {
+  width: 50px;
+}
+
+.userpegs {
+  width: 20em;
+  margin-bottom: 2em;
+}
+
+.pastpegs {
+  margin-top: 1em;
+  display: grid;
+  grid-template-columns: 10em 10em;
+}
+
+.resultpegs {
+  display: inline-block;
+}
+
+.fullpeg {
+  background-image: url(images/circlefull.svg);
+  display: inline-block;
+  height: 24px;
+  width: 24px;
+}
+
+.whitepeg {
+  background-image: url(images/whitecircle.svg);
+  display: inline-block;
+  height: 24px;
+  width: 24px;
+}
+
+.redpeg {
+  background-image: url(images/redcircle.svg);
+  display: inline-block;
+  height: 24px;
+  width: 24px;
+}
+
+.greenpeg {
+  background-image: url(images/greencircle.svg);
+  display: inline-block;
+  height: 24px;
+  width: 24px;
+}
+
+.purplepeg {
+  background-image: url(images/purplecircle.svg);
+  display: inline-block;
+  height: 24px;
+  width: 24px;
+}
+
+.bluepeg {
+  background-image: url(images/bluecircle.svg);
+  display: inline-block;
+  height: 24px;
+  width: 24px;
+}
+
+.pinkpeg {
+  background-image: url(images/pinkcircle.svg);
+  display: inline-block;
+  height: 24px;
+  width: 24px;
+}
