@@ -17,6 +17,7 @@ Mastermind = class {
   onButtonClick (theEvent) {
     if (this.AnswerData.GuessCount == 10) {
       console.log("you lose")
+      this.WinCondition()
       return
     }
     this.AnswerData.GuessCount = this.AnswerData.GuessCount + 1
@@ -81,7 +82,7 @@ Mastermind = class {
     }
   }
 
-  //setting up the board
+  //populating the board
   PastGuessesFill () {
     const emptyPast = document.getElementById('pastpegstemplate')
     const pastList = document.getElementById('pastpegsarray')
@@ -96,12 +97,50 @@ Mastermind = class {
     }
   }
 
+  ResultPrinter () {
+    if (this.AnswerData.BlackCheckChecker == 1) {
+      const currentPast = document.getElementById('pastpegs' + this.AnswerData.GuessCount)
+      const resultPegs = currentPast.getElementsByClassName('resultpegs')[0]
+      const resultTemplate = resultPegs.getElementsByClassName('templatepeg')[0]
+      const whiteCount = this.AnswerData.WhiteCount
+
+      for (var looper = 0; looper < whiteCount; looper++) {
+        const newResult = resultTemplate.cloneNode(true)
+
+        newResult.classList.add('whitepeg')
+        newResult.classList.remove('hidden')
+        newResult.classList.remove('templatepeg')
+
+        resultPegs.appendChild(newResult)
+      }
+      this.AnswerData.BlackCheckChecker = 0
+      return
+    }
+
+    const currentPast = document.getElementById('pastpegs' + this.AnswerData.GuessCount)
+    const resultPegs = currentPast.getElementsByClassName('resultpegs')[0]
+    const resultTemplate = resultPegs.getElementsByClassName('templatepeg')[0]
+    const blackCount = this.AnswerData.BlackCount
+
+    for (var counter = 0; counter < blackCount; counter++) {
+      const newResult = resultTemplate.cloneNode(true)
+
+      newResult.classList.add('fullpeg')
+      newResult.classList.remove('hidden')
+      newResult.classList.remove('templatepeg')
+
+      resultPegs.appendChild(newResult)
+    }
+    
+    this.AnswerData.BlackCheckChecker = 1
+  }
+
   //functions
   ResultResetter () {
     const guessPegList = this.DataLists.guessPegs
-    const guessPegCount = this.DataLists.guessPegs.length
+    const guessPegCount = guessPegList.length
     const answerPegList = this.DataLists.answerPegs
-    const answerPegCount = this.DataLists.answerPegs.length
+    const answerPegCount = answerPegList.length
 
     for (var counter = 0; counter < guessPegCount; counter++) {
       guessPegList.pop()
@@ -139,7 +178,7 @@ Mastermind = class {
   ResultProducerBlack () {
     const guessPegs = this.DataLists.guessPegs
     const answerPegs = this.DataLists.answerPegs
-    var guessCount = this.DataLists.guessPegs.length
+    var guessCount = guessPegs.length
 
     for (var counter = 0; counter < guessCount; counter++) {
       const currentGuess = this.DataLists.guessPegs[counter]
@@ -155,8 +194,10 @@ Mastermind = class {
       }
     }
     console.log('black:' + this.AnswerData.BlackCount)
+    this.ResultPrinter()
     if (this.AnswerData.BlackCount == 4) {
       console.log("you win")
+      this.WinCondition()
       return
     }
     this.ResultProducerWhite() 
@@ -165,8 +206,8 @@ Mastermind = class {
   ResultProducerWhite () {
     const guessPegs = this.DataLists.guessPegs
     const answerPegs = this.DataLists.answerPegs
-    var guessCount = this.DataLists.guessPegs.length
-    var answerCount = this.DataLists.answerPegs.length
+    var guessCount = guessPegs.length
+    var answerCount = answerPegs.length
 
     for (var counter = 0; counter < guessCount; counter++) {
       const currentGuess = guessPegs[counter]
@@ -187,6 +228,18 @@ Mastermind = class {
       }
     }
     console.log("white:" + this.AnswerData.WhiteCount)
+    this.ResultPrinter()
+  }
+
+  WinCondition () {
+    const winPegs = document.getElementsByClassName('winpeg')
+    const winCount = winPegs.length
+
+    for (var counter = 0; counter < winCount; counter++) {
+      const currentWin = winPegs[counter]
+
+      currentWin.classList.remove('hidden')
+    }
   }
 }
 const mastermindGame = new Mastermind()
