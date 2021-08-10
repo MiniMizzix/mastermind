@@ -1,7 +1,7 @@
-
 Mastermind = class {
   constructor () {
     this.AnswerData = new AnswerClass()
+    this.DataLists = new ArrayClass()
     this.CurrentInputPeg = null
     //event listeners
     document.getElementById('guessbutton').addEventListener('click', event => this.onButtonClick(event))
@@ -16,10 +16,11 @@ Mastermind = class {
   //events 
   onButtonClick (theEvent) {
     if (this.AnswerData.GuessCount == 10) {
+      console.log("you lose")
       return
     }
     this.AnswerData.GuessCount = this.AnswerData.GuessCount + 1
-    console.log(this.AnswerData.GuessCount)
+    console.log("guesses:" + this.AnswerData.GuessCount)
     const targetPast = document.getElementById('pastpegs' + this.AnswerData.GuessCount)
     const pegsList = targetPast.getElementsByClassName('guesspegs')
     const emptyPegs = pegsList[0].getElementsByClassName('nopeg')
@@ -31,35 +32,11 @@ Mastermind = class {
       emptyPegs[counter].classList.add(inputSwap)
       emptyPegs[counter].classList.remove('fullpeg')
     }
-
-    //
-
-    const winCheck = document.getElementById('pastpegs' + this.AnswerData.GuessCount)
-    const checkPegs = winCheck.getElementsByClassName('guesspegs')
-    const fullPegs = checkPegs[0].getElementsByClassName('nopeg')
-    
-    for (var counter = 0; counter < fullPegs.length; counter++) {
-      const winPegs = document.getElementsByClassName('winpeg')
-      const winPegsCount = winPegs.length
-      const currentFullPeg = fullPegs[counter].classList[1]
-      
-      for (var looper = 0; looper < winPegsCount; looper++) {
-        const currentWin = winPegs[looper].classList[0]
-        if (currentWin == currentFullPeg) {
-          if (counter == looper) {
-            console.log('this.BlackPegResult()')
-            looper = 5
-          } else {
-            console.log('this.WhitePegResult()')
-            looper = 5
-          }
-        } else {
-          console.log('.')
-          looper = 5
-        }
-        //multiples of the same colour in either set of pegs doesnt work at all right now
-      }
+    if (this.AnswerData.GuessCount > 1) {
+      this.ResultResetter()
+      return
     }
+    this.ResultCollector()
   }
 
   onInputClick (theEvent) {
@@ -117,6 +94,99 @@ Mastermind = class {
       newPast.setAttribute('id', 'pastpegs' + counter)
       pastList.insertBefore(newPast, pastList.childNodes[0])
     }
+  }
+
+  //functions
+  ResultResetter () {
+    const guessPegList = this.DataLists.guessPegs
+    const guessPegCount = this.DataLists.guessPegs.length
+    const answerPegList = this.DataLists.answerPegs
+    const answerPegCount = this.DataLists.answerPegs.length
+
+    for (var counter = 0; counter < guessPegCount; counter++) {
+      guessPegList.pop()
+    }
+    for (var looper = 0; looper < answerPegCount; looper++) {
+      answerPegList.pop()
+    }
+    this.AnswerData.BlackCount = 0
+    this.AnswerData.WhiteCount = 0
+    this.ResultCollector()
+  }
+
+  ResultCollector () {
+    const answerPegs = document.getElementsByClassName('winpeg')
+    const answerPegsCount = answerPegs.length
+
+    for (var counter = 0; counter < answerPegsCount; counter++) {
+      const currentAnswer = answerPegs[counter].classList[0]
+
+      this.DataLists.answerPegs.push(currentAnswer)
+    }
+    
+    const guessRow = document.getElementById('pastpegs' + this.AnswerData.GuessCount)
+    const guessPegs = guessRow.getElementsByClassName('nopeg')
+    const guessPegsCount = guessPegs.length
+
+    for (var counter = 0; counter < guessPegsCount; counter++) {
+      const currentGuess = guessPegs[counter].classList[1]
+
+      this.DataLists.guessPegs.push(currentGuess)
+    }
+    this.ResultProducerBlack()
+  }
+
+  ResultProducerBlack () {
+    const guessPegs = this.DataLists.guessPegs
+    const answerPegs = this.DataLists.answerPegs
+    var guessCount = this.DataLists.guessPegs.length
+
+    for (var counter = 0; counter < guessCount; counter++) {
+      const currentGuess = this.DataLists.guessPegs[counter]
+      const currentAnswer = this.DataLists.answerPegs[counter]
+
+      if (currentGuess === currentAnswer) {
+        guessPegs.splice(counter, 1)
+        answerPegs.splice(counter, 1)
+
+        counter = counter - 1
+        guessCount = guessCount - 1
+        this.AnswerData.BlackCount = this.AnswerData.BlackCount + 1
+      }
+    }
+    console.log('black:' + this.AnswerData.BlackCount)
+    if (this.AnswerData.BlackCount == 4) {
+      console.log("you win")
+      return
+    }
+    this.ResultProducerWhite() 
+  }
+
+  ResultProducerWhite () {
+    const guessPegs = this.DataLists.guessPegs
+    const answerPegs = this.DataLists.answerPegs
+    var guessCount = this.DataLists.guessPegs.length
+    var answerCount = this.DataLists.answerPegs.length
+
+    for (var counter = 0; counter < guessCount; counter++) {
+      const currentGuess = guessPegs[counter]
+
+      for (var looper = 0; looper < answerCount; looper++) {
+        const currentAnswer = answerPegs[looper]
+
+        if (currentGuess === currentAnswer) {
+          guessPegs.splice(counter, 1)
+          answerPegs.splice(looper, 1)
+
+          counter = counter - 1
+          guessCount = guessCount - 1
+          answerCount = answerCount - 1
+
+          this.AnswerData.WhiteCount = this.AnswerData.WhiteCount + 1
+        }
+      }
+    }
+    console.log("white:" + this.AnswerData.WhiteCount)
   }
 }
 const mastermindGame = new Mastermind()
