@@ -114,6 +114,7 @@ Mastermind = class {
         resultPegs.appendChild(newResult)
       }
       this.AnswerData.BlackCheckChecker = 0
+      this.InputResetter()
       return
     }
 
@@ -148,9 +149,22 @@ Mastermind = class {
     for (var looper = 0; looper < answerPegCount; looper++) {
       answerPegList.pop()
     }
+    
+
     this.AnswerData.BlackCount = 0
     this.AnswerData.WhiteCount = 0
     this.ResultCollector()
+  }
+
+  InputResetter () {
+    const guessResetter = document.getElementsByClassName('inputpeg')
+    const inputCount = guessResetter.length
+
+    for (var repeater = 0; repeater < inputCount; repeater++) {
+      const currentInput = guessResetter[repeater]
+
+      currentInput.classList.replace(currentInput.classList[0], 'whitepeg')
+    }
   }
 
   ResultCollector () {
@@ -197,6 +211,7 @@ Mastermind = class {
     this.ResultPrinter()
     if (this.AnswerData.BlackCount == 4) {
       console.log("you win")
+      this.InputResetter()
       this.WinCondition()
       return
     }
