@@ -7,49 +7,52 @@
     <link href="style.css" rel="stylesheet" type="text/css" />
   </head>
   <body>
-    <div class="answerpegs">
-      <span class="redpeg winpeg hidden"></span>
-      <span class="redpeg winpeg hidden"></span>
-      <span class="greenpeg winpeg hidden"></span>
-      <span class="purplepeg winpeg hidden"></span>
-    </div>
+    <div id="atlas" class="thewholegame">
+      <div class="answerpegs">
+        <span colour="bluepeg" class="redpeg winpeg hidden"></span>
+        <span colour="purplepeg" class="redpeg winpeg hidden"></span>
+        <span colour="bluepeg" class="greenpeg winpeg hidden"></span>
+        <span colour="pinkpeg" class="purplepeg winpeg hidden"></span>
+      </div>
+      <span id="congration" class="hidden">congratulations!</span>
 
-    <div class="userpegs">
-      <div id="pastpegsarray" class="pastpegsarray">
-        <div id="pastpegstemplate" class="hidden">
-          <div class="guesspegs">
-            <span class="fullpeg nopeg"></span>
-            <span class="fullpeg nopeg"></span>
-            <span class="fullpeg nopeg"></span> 
-            <span class="fullpeg nopeg"></span>
-          </div>
+      <div class="userpegs">
+        <div id="pastpegsarray" class="pastpegsarray">
+          <div id="pastpegstemplate" class="hidden">
+            <div class="guesspegs">
+              <span colour="fullpeg" class="fullpeg nopeg"></span>
+              <span colour="fullpeg" class="fullpeg nopeg"></span>
+              <span colour="fullpeg" class="fullpeg nopeg"></span> 
+              <span colour="fullpeg" class="fullpeg nopeg"></span>
+            </div>
 
-          <div class="resultpegs">
-            <span class="templatepeg hidden"></span>
+            <div class="resultpegs">
+              <span class="templatepeg hidden"></span>
+            </div>
           </div>
         </div>
       </div>
-    </div>
 
 
-    <div id="inputpegs" class="inputpegs">
-      <span id="input1" class="whitepeg inputpeg"></span>
-      <span id="input2" class="whitepeg inputpeg"></span>
-      <span id="input3" class="whitepeg inputpeg"></span> 
-      <span id="input4" class="whitepeg inputpeg"></span>
+      <div id="inputpegs" class="inputpegs">
+        <span id="input1" colour="whitepeg" class="whitepeg inputpeg"></span>
+        <span id="input2" colour="whitepeg" class="whitepeg inputpeg"></span>
+        <span id="input3" colour="whitepeg" class="whitepeg inputpeg"></span> 
+        <span id="input4" colour="whitepeg" class="whitepeg inputpeg"></span>
 
-      <button id="guessbutton" class="guessbutton">guess</button>
-    </div>
+        <button id="guessbutton" class="guessbutton">guess</button>
+      </div>
 
-    <div id="choicepegs" class="choicepegs notshown">
-      <div class="pegchoices">
-        <span class="redpeg choicepeg"></span>
-        <span class="bluepeg choicepeg"></span>
-        <span class="greenpeg choicepeg"></span>
-        <span class="pinkpeg choicepeg"></span>
-        <span class="purplepeg choicepeg"></span>
-        <span class="whitepeg choicepeg"></span>
-      </div> 
+      <div id="choicepegs" class="choicepegs notshown">
+        <div class="pegchoices">
+          <span colour="redpeg" class="redpeg choicepeg"></span>
+          <span colour="bluepeg" class="bluepeg choicepeg"></span>
+          <span colour="greenpeg" class="greenpeg choicepeg"></span>
+          <span colour="pinkpeg" class="pinkpeg choicepeg"></span>
+          <span colour="purplepeg" class="purplepeg choicepeg"></span>
+          <span colour="whitepeg" class="whitepeg choicepeg"></span>
+        </div> 
+      </div>
     </div>
 
     <script src="answer.js"></script>

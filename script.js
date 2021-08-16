@@ -1,3 +1,4 @@
+//colour attribute technically works, but doesnt change yet so do that
 Mastermind = class {
   constructor () {
     this.AnswerData = new AnswerClass()
@@ -11,15 +12,11 @@ Mastermind = class {
 
     //populate
     this.PastGuessesFill()
+    this.AnswerRandomizer()
   }
 
   //events 
   onButtonClick (theEvent) {
-    if (this.AnswerData.GuessCount == 10) {
-      console.log("you lose")
-      this.WinCondition()
-      return
-    }
     this.AnswerData.GuessCount = this.AnswerData.GuessCount + 1
     console.log("guesses:" + this.AnswerData.GuessCount)
     const targetPast = document.getElementById('pastpegs' + this.AnswerData.GuessCount)
@@ -28,8 +25,9 @@ Mastermind = class {
     
     for (var counter = 0; counter < emptyPegs.length; counter++) {
       const inputPegs = document.getElementsByClassName('inputpeg')
-      const inputSwap = inputPegs[counter].classList[0]
-      
+      const inputSwap = inputPegs[counter].getAttribute('colour')
+
+      emptyPegs[counter].setAttribute('colour', inputSwap)
       emptyPegs[counter].classList.add(inputSwap)
       emptyPegs[counter].classList.remove('fullpeg')
     }
@@ -53,7 +51,9 @@ Mastermind = class {
     const swapPeg = document.getElementById(this.AnswerData.CurrentInputPeg)
     const choicePegs = document.getElementById('choicepegs')
 
-    swapPeg.classList.replace(swapPeg.classList[0] , event.target.classList[0])
+    swapPeg.classList.replace(swapPeg.getAttribute('colour'), event.target.getAttribute('colour'))
+
+    swapPeg.setAttribute('colour', event.target.getAttribute('colour'))
 
     choicePegs.classList.toggle('notshown')
     choicePegs.classList.toggle('extenddroplist')
@@ -83,6 +83,25 @@ Mastermind = class {
   }
 
   //populating the board
+  AnswerRandomizer () {
+    const winPegs = document.getElementsByClassName('winpeg')
+    const winPegCount = winPegs.length
+
+    for (var counter = 0; counter < winPegCount; counter++) {
+      var random = Math.random()
+      random = random*5
+      const ceiledRandom = Math.ceil(random)
+
+      const randPeg = this.DataLists.choicePegs[ceiledRandom]
+
+      const currentWin = winPegs[counter]
+      const currentWinColour = currentWin.getAttribute('colour')
+      currentWin.classList.remove(currentWinColour)
+      currentWin.classList.add(randPeg)
+      currentWin.setAttribute('colour', randPeg)
+    }
+  }
+
   PastGuessesFill () {
     const emptyPast = document.getElementById('pastpegstemplate')
     const pastList = document.getElementById('pastpegsarray')
@@ -106,7 +125,7 @@ Mastermind = class {
 
       for (var looper = 0; looper < whiteCount; looper++) {
         const newResult = resultTemplate.cloneNode(true)
-
+        
         newResult.classList.add('whitepeg')
         newResult.classList.remove('hidden')
         newResult.classList.remove('templatepeg')
@@ -114,6 +133,11 @@ Mastermind = class {
         resultPegs.appendChild(newResult)
       }
       this.AnswerData.BlackCheckChecker = 0
+      if (this.AnswerData.GuessCount == 10) {
+        console.log("you lose")
+        this.WinCondition()
+        return
+    }
       this.InputResetter()
       return
     }
@@ -163,7 +187,8 @@ Mastermind = class {
     for (var repeater = 0; repeater < inputCount; repeater++) {
       const currentInput = guessResetter[repeater]
 
-      currentInput.classList.replace(currentInput.classList[0], 'whitepeg')
+      currentInput.classList.replace(currentInput.getAttribute('colour'), 'whitepeg')
+      currentInput.setAttribute('colour', 'whitepeg')
     }
   }
 
@@ -172,7 +197,7 @@ Mastermind = class {
     const answerPegsCount = answerPegs.length
 
     for (var counter = 0; counter < answerPegsCount; counter++) {
-      const currentAnswer = answerPegs[counter].classList[0]
+      const currentAnswer = answerPegs[counter].getAttribute('colour')
 
       this.DataLists.answerPegs.push(currentAnswer)
     }
@@ -182,7 +207,7 @@ Mastermind = class {
     const guessPegsCount = guessPegs.length
 
     for (var counter = 0; counter < guessPegsCount; counter++) {
-      const currentGuess = guessPegs[counter].classList[1]
+      const currentGuess = guessPegs[counter].getAttribute('colour')
 
       this.DataLists.guessPegs.push(currentGuess)
     }
@@ -211,6 +236,8 @@ Mastermind = class {
     this.ResultPrinter()
     if (this.AnswerData.BlackCount == 4) {
       console.log("you win")
+      const congration = document.getElementById('congration')
+      congration.classList.remove('hidden')
       this.InputResetter()
       this.WinCondition()
       return
@@ -225,10 +252,10 @@ Mastermind = class {
     var answerCount = answerPegs.length
 
     for (var counter = 0; counter < guessCount; counter++) {
-      const currentGuess = guessPegs[counter]
 
       for (var looper = 0; looper < answerCount; looper++) {
         const currentAnswer = answerPegs[looper]
+        const currentGuess = guessPegs[counter]
 
         if (currentGuess === currentAnswer) {
           guessPegs.splice(counter, 1)
